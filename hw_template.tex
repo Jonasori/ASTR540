@@ -1,0 +1,92 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{graphicx}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+%If you want to title your bold things something different just make another thing exactly like this but replace "problem" with the name of the thing you want, like theorem or lemma or whatever
+
+\newenvironment{answer}[2][Answer]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\begin{document}
+
+%\renewcommand{\qedsymbol}{\filledbox}
+%Good resources for looking up how to do stuff:
+%Binary operators: http://www.access2science.com/latex/Binary.html
+%General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
+%Or just google stuff
+
+\title{AST 540: Problem Set 1}
+\author{Jonas Powell}
+\maketitle
+
+\begin{problem}{1}
+
+\end{problem}
+
+\begin{answer}{1}
+
+
+\end{answer}
+
+\bigskip
+\bigskip
+
+\begin{problem}{2}
+Calculate the temperature at which the number density of hydrogen atoms in the first excited state is $1 \over 20$ of the number density of hydrogen atoms in the ground (fundamental) state. [Note: this is just a small variation of Question 1.7 from your textbook and the answer to that question is provided in the book. So, an intelligent strategy would be -- do that problem first and be sure you get the right answer.]
+\end{problem}
+
+\begin{answer}{2}
+
+\begin{align}
+  T &= \frac{E_2}{K \log{\frac{1}{80}}}  \notag \\
+    &= 27020 \text{ Kelvin}
+\end{align}
+
+\end{answer}
+\bigskip
+\bigskip
+
+\begin{problem}{3}
+What is the ionization fraction of HI at a depth where T = 8000 K and P = 140 dyne/cm$^2$ in a star composed of pure hydrogen. You may approximate the partition function of neutral hydrogen, U$_I$ in the book's notation, to be equal to the statistical weight of the ground state, namely g = 2. [Note that this is a small variation of Question 1.9 from your textbook, so try that one first and make sure you get the answer given in the back of the book.]
+\end{problem}
+
+\begin{answer}{3}
+
+\end{answer}
+\bigskip
+\bigskip
+
+
+
+
+\begin{problem}{4}
+Calculate the P(r) inside a sphere of radius R$_\star$ with a constant density $\rho$. (This is Question 2.2 from the book.)
+\end{problem}
+
+\begin{answer}{4}
+
+
+\begin{equation}
+  \frac{dP(r)}{dr} = -\rho \frac{GM}{r^2}
+\end{equation}
+
+\begin{equation}
+  M = \frac{4}{3} \pi r^3 \rho
+\end{equation}
+
+
+
+\end{answer}
+\bigskip
+\bigskip
+
+
+
+
+\end{document}

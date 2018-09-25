@@ -1,0 +1,433 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{listing}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\iu}{{i\mkern1mu}}
+
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+%If you want to title your bold things something different just make another thing exactly like this but replace "problem" with the name of the thing you want, like theorem or lemma or whatever
+
+\newenvironment{warmup}[2][Warm Up]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+
+\newenvironment{answer}[2][Answer]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{part}[2][Part]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\begin{document}
+
+%\renewcommand{\qedsymbol}{\filledbox}
+%Good resources for looking up how to do stuff:
+%Binary operators: http://www.access2science.com/latex/Binary.html
+%General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
+%Or just google stuff
+
+\title{AST 540: Problem Set 1}
+\author{Jonas Powell}
+\maketitle
+
+\begin{warmup}{1}
+  You read in an astronomy journal that the flux density Fν of a particular quasar is 1 Jy at a wavelength of 7 mm. Express this flux density in wavelength (F$_{\lambda}$) units of $  \frac{\text{ergs}}{\text{cm$^2$ S \AA}} $.
+\end{warmup}
+
+\begin{answer}{1}
+
+For this problem, we need only to convert our flux density from units of frequency to units of wavelength. To do this, we recall that:
+
+\begin{align*}
+  F_{\lambda} &= F_{\nu} \frac{d \nu}{d \lambda} \\
+              &= F_{\nu} \frac{c}{{\lambda}^2} \\
+              &= 10^{-23} \frac{\text{ergs}}{\text{cm$^2$ S Hz}} \times \frac{3 * 10^{18}} {{(7 * 10^7)}^2} \,\, \frac{\text{\AA \,\,s$^{-1}$}}{\text{\AA}^2} \\
+              &= 6.122 \times 10^{-21} \,\,  \frac{\text{ergs}}{\text{cm$^2$ S \AA}}
+\end{align}
+\end{answer}
+
+\bigskip
+\bigskip
+
+
+\begin{warmup}{2}
+  A sphere 100 m in diameter is at a temperature of 290 K and may be considered a blackbody radiator.
+It is at a distance of 200,000 km. What is the flux density of the source in Jy at a wavelength of 1.3 mm?
+(Can you guess what sort of astronomical object this scenario might represent?)
+\end{warmup}
+
+\begin{answer}{2}
+
+For this problem, would like to retrieve the flux density from the given information. To do so, we begin by recalling that:
+
+\begin{align*}
+  F_{\lambda} \text{[JY]} &= F_{\nu} \frac{d \nu}{d \lambda} \\
+                          &= I_{\lambda} \, \frac{\pi}{4} \,\,\, \theta^2
+\end{align}
+
+We know that, in the Rayleigh-Jeans energy regime, $I_{\lambda}$ is given by:
+\begin{align*}
+  I_{\lambda}^{\text{RJ}} &= 2\text{kT} \,\, \lambda^{-2}
+\end{align}
+
+and that, for small angles:
+\begin{align*}
+  \theta &= \tan \theta \\
+         &= \frac{100 \text{ m}}{200,000 \text{ km}}
+\end{align}
+
+ Combining these equations, we find that:
+\begin{align*}
+ F_{\lambda} &= \frac{\text{2 k} \,\, (290 \text{ Kelvin})}{(1.33 \times 10^{-3} \text{ meters})^2} \times  (\frac{\pi}{4}) \,\, (0.5 \times 10^{-6})^2 \\
+             &= 9.3 \times 10^{-28} \,\, \frac{\text{kg}}{\text{s$^2$}}\\
+             &= 0.093 \text{  Jy}
+\end{align}
+\end{answer}
+
+\bigskip
+\bigskip
+
+
+
+\begin{warmup}{3}
+  You observe a 1 RSun star at a distance of 10 pc from the earth with a 10 m-diameter radio telescope at a frequency of 345 GHz. The bandwidth of your observation is 8 GHz. You integrate for 1 min and measure a total received energy during this time of 3.77 × 10−17 J.
+
+  A) What is the radio flux density of the star in units of Jy?
+
+  B) What is the brightness temperature of the star? (You may assume that we are observing in the Rayleigh Jeans limit.) Is this temperature consistent with the photospheric temperature you might expect for a roughly Solar-type (FGK) star?
+
+  C) What is the equivalent antenna temperature that you measure? (Note: This should give you some idea why stars are so difficult to detect at radio wavelengths!)
+\end{warmup}
+
+\begin{answer}{3A}
+  %\begin{part}{a}
+  To find the flux density, we recall its basic units and, conveniently enough, we are given everything we need:
+  \begin{align*}
+    F_{\nu} &= \frac{\text{energy}}{\text{Area dt d$\nu$}} \\
+            &= \frac{3.77 \times 10^{-17}}{25 \pi \,\, (60) \,\, 8 \times 10^9} \,\, \frac{\text{Joules}}{\text{m$^2$ s Hz}} \\
+            &= 10^{-4} \text{  Jy}
+  \end{align}
+\end{answer}
+
+\begin{answer}{3B}
+  We begin by recalling that the definition of brightness temperature is bound up in the Planck function in the Rayleigh Jeans limit, which we can rearrange to give T$_{B}$:
+  \begin{align*}
+    I_{\nu} = \frac{\text{2k T$_B$ } \nu^2}{\text{c}^2} \\
+    \rightarrow T_B = \frac{I_{\nu} \text{c}^2 }{\text{2k} \nu^2}
+  \end{align}
+
+  To find $I_\nu$, we can recall its relation to $F_\nu$ (whose value we have from 3A) and $\theta$, which, as in Warm Up 2, we can use the Small Angle Approximation to find from the object's distance and radius:
+  \begin{align*}
+    I_{\nu} &= \frac{4 F_{\nu}}{\pi \theta^2} \\
+    F_{\nu} &= 10^{-4} \text{ Jy} \\
+    \theta &= \frac{\text{1 R$_{\odot}$}}{\text{10 Parsec}}
+  \end{align}
+
+  Using these values, we can easily find our T$_B$ at the given frequency of $\nu = 345$ GHz:
+  \begin{align*}
+    T_B &= \frac{4 F_{\nu}}{\pi \theta^2} \frac{c^2}{\text{2k} \nu^2} \frac{\text{ Jy m$^2$ s$^{-2}$}}{\text{Hz$^2$}} \\
+        &= 6850 \text{ Kelvin}
+  \end{align}
+
+  This is right in the middle of the temperature range for F stars, and about a thousand degrees over our Sun's photospheric temperature.
+\end{answer}
+
+
+
+\begin{answer}{3C}
+  For sources with $\Omega_{\text{source}} < \Omega_{\text{collecting area}}$, we use the following equation to find antenna temperature:
+  \begin{align*}
+    T_A &= T_B \,\, \frac{\Omega_{\text{S}}}{\Omega_{\text{A}}}
+  \end{align}
+
+Subsituting expressions for $\Omega_{\text{A}}$, $\Omega_{\text{S}}$ and then values in for those expressions, we can find our result.
+  \begin{align*}
+    &= T_B \,\, \frac{\text{A$_{\text{eff}}$}}{\text{c}^2 \, \nu^{-2}} \,\, \Omega_{S} \\
+    &= T_B \,\, \frac{(\pi \, \text{r}^2)}{\text{c}^2 \, \nu^{-2}} \,\, (\frac{\pi}{4} \theta^2) \\
+    &= 2.85 \times 10^{-6} \text{ Kelvin}
+  \end{align}
+\end{answer}
+
+
+\bigskip
+\bigskip
+
+
+\begin{warmup}{4}
+  How does beam size affect the antenna temperature of the CMB? How does beam size affect the antenna temperature of small (but bright) sources like quasars? Do you think that a large or small telescope is more advantageous for detecting the strongest CMB signal relative to other cosmic signals? Explain your reasoning.
+\end{warmup}
+
+\begin{answer}{4}
+  Although this is a qualitative question, I think using some equations is a useful way to guide my reasoning. Basically, we want to maximize the fraction $\frac{T_{\text{B, CMB}}}{T_{\text{B, quasars and other things}}}$. We recall that the definitions of these two quantities are:
+  \begin{align*}
+    T_{\text{A, CMB}} &= T_{\text{B}} \\
+    T_{\text{A, q}} &= T_{\text{B}} \,\, \frac{\Omega_{\text{S}}}{\Omega_{\text{A}}}
+  \end{align}
+
+  Since we want to detect the strongest relative signal from the CMB as possible, we want to maximize the fraction above, which becomes:
+  \begin{align*}
+    \frac{T_{\text{B, CMB}}}{T_{\text{B, q}}} &= \frac{T_{\text{B}}}{T_{\text{B}} \,\, \frac{\Omega_{\text{S}}}{\Omega_{\text{A}}}} \\
+                                              &= \frac{\Omega_{\text{A}}}{\Omega_{\text{S}}}
+  \end{align}
+
+  Therefore, maximizing the size of our main beam, $\Omega_{\text{A}}$ will minimize the contributions to T$_B$ from non-CMB sources, which is what we want!
+\end{answer}
+
+
+
+\bigskip
+\bigskip
+
+
+\begin{warmup}{5}
+  Show that the Fourier transform of a Gaussian is a Gaussian with inverse width. How do the amplitudes
+of the two Gaussians compare?
+\end{warmup}
+
+\begin{answer}{5}
+
+  We would like to Fourier transform some Gaussian function $g(x) = e^{-{\text{b} x^2}}$ and see what happens. We may begin by just plugging $g(x)$ into the FT formula:
+
+  \begin{align*}
+    G(y) &= \int_{-\infty}^{\infty} g(x) \,\, e^{-2 \pi \iu x y} dx \\
+         &= \int_{-\infty}^{\infty} e^{-{\text{b} x^2}} \,\, e^{-2 \pi \iu x y} dx \\
+         &= \int_{-\infty}^{\infty} \exp[{-\text{b}(x^2 + \frac{2 \pi \, \iu  \,x y}{\text{b}}})] dx \\
+  \end{align}
+
+We can then use WolframAlpha to help us complete the square inside the exponential, pull the x-independent term out of the integral, and u-substitute with $u = x + \frac{\iu \, \pi \, y}{\text{b}}, du = dx$ to solve the integral:
+\begin{align*}
+  G(y) &= \int_{-\infty}^{\infty} e^{-(\frac{(\pi \, y)^2}{\text{b}})} e^{-b(x + \frac{\iu \, \pi \, y}{\text{b}})^2} dx \\
+       &= e^{-\frac{(\pi \, y)^2}{\text{b}}} \int_{-\infty}^{\infty} e^{-bu^2} du \\
+       &= \sqrt{\frac{\pi}{b}} \,\, e^{-\frac{(\pi \, y)^2}{\text{b}}}
+\end{align}
+
+We see that the Fourier transform of our original Gaussian function has been scaled by a factor of $\sqrt{\frac{\pi}{b}}$ out front and that the exponential has been similarly scaled by a factor of $\frac{\pi^2}{\text{b}}$.
+
+\end{answer}
+
+
+\bigskip
+\bigskip
+
+
+\begin{problem}{1}
+  A radio source has flux densities of S1 = 12.1 Jy and S2 = 8.3 Jy at frequencies of ν1 = 600 MHz and
+ν2 = 1415 MHz, respectively.
+
+A) Show that its spectral index α = [log (S1/S2)]/[log (ν2/ν1)]
+
+B) Calculate its spectral index.
+
+C) Is the spectrum thermal or nonthermal?
+\end{problem}
+
+\begin{answer}{1A}
+We build our derivation from the equation $S = k \nu^{-\alpha}$, and subtracting the two observations from one another.
+
+\begin{align*}
+  \log [S_1] - log [S_2] &= \log [k \nu_{1}^{-\alpha}) - \log (k \nu_{2}^{-\alpha}] \\
+  \log [\frac{S_1}{S_2}] &= \log [ \frac{\nu_{1}^{-\alpha}}{\nu_{2}^{-\alpha}}] \\
+                         &= \log [ (\frac{\nu_{2}}{\nu_{1}})^{\alpha}] \\
+                         &= \alpha \log [\frac{\nu_{2}}{\nu_{1}}] \\
+  \alpha &= \frac{\log [\frac{S_1}{S_2}]}{\log [\frac{\nu_{2}}{\nu_{1}}]}
+\end{align}
+\end{answer}
+
+\begin{answer}{1B}
+  We can now just plug in the given values to get our result for $\alpha$:
+  \begin{align*}
+    \alpha &= \frac{\log [\frac{12.1}{8.3}]}{\log [\frac{1415}{600}]} \\
+           &= 0.44
+  \end{align}
+\end{anwer}
+
+\begin{answer}{1C}
+  We know that thermal sources have $\alpha \approx -2$, so this must be a non-thermal source.
+\end{answer}
+
+
+
+\begin{problem}{2}
+  A supernova remnant has an angular diameter θ=4.3 arc minutes and a flux at 100 MHz of F100 = 1.6 × 10−19 erg cm−2
+s−1 Hz−1. Assume that the emission is thermal.
+
+A) What is the brightness temperature Tb? What energy regime of the blackbody curve does this correspond
+to?
+
+B) The emitting region is actually more compact than indicated by the observed angular diameter. What
+effect does this have on the value of Tb?
+
+C) At what frequency will this object’s radiation be maximum, if the emission is blackbody?
+
+D) What can you say about the temperature of the material from the above results?
+\end{problem}
+
+\begin{answer}{2A}
+  We can again rearrange and use the Planck function in the Rayleigh-Jeans limit, again taking advantage of the known relation between flux density and $I_\nu$:
+
+  \begin{align}
+    T_B &= \frac{1}{2k} \, \frac{c}{\nu}^2 \, I_{\nu} \\
+    T_B &= \frac{1}{2k} \, \frac{c}{\nu}^2 \, (\frac{4 \, F_{\nu}}{\theta^2 \, \pi}) \\
+        &= 4.2 \times 10^7 \,\, \text{ Kelvin}
+  \end{align}
+
+  We can see what energy regime this corresponds to by evaluating the Rayleigh-Jeans Regime Checker-o-rama:
+  \begin{align*}
+    \frac{\nu \text{ (GHz)}}{\text{T (K)}} &= \frac{10^{-3} \text{ GHz}}{4.2 \times 10^7 \text{ K}} \\
+                                           &= 2.38 \times 10^{-11}
+  \end{align}
+
+  Since this is way less than the magic number of 22 we need to be in the Rayleigh-Jeans regime, which means we're good to use those approximations.
+\end{answer}
+
+\begin{answer}{2B}
+  A decrease in observed angular diameter, $\theta$, will increase T$_B$ (quite quickly, too, since T$_B \propto \theta^{-2}$).
+\end{answer}
+
+
+\begin{answer}{2C}
+  To find $\nu_{\text{max}}$, we can simply plug T$_B$ (from above) into Wein's Law:
+  \begin{align*}
+    \nu_{\text{max}} &= 2.82 * \frac{\text{k}}{\text{h}} \,\, T_{B} \\
+                     &= 2.45 \times 10^{18} \text{ Hz}
+  \end{align}
+\end{answer}
+
+
+\begin{answer}{2D}
+  Since $\theta$ is likely actually much smaller than our observed value, we can say that the true temperature is probably higher than the number we got in part A.
+\end{answer}
+
+
+\bigskip
+\bigskip
+
+\begin{problem}{3}
+  Calculate the quietest (i.e., darkest) place in the radio spectrum. Neglect noise from the earth’s atmosphere. At low frequencies the sky noise is dominated by synchrotron emission from relativistic electrons rattling around all over the galaxy. Away from the galaxy plane, the brightness temperature is $T_B \approx 180 \text{ K} \frac{\nu}{180 \text{ MHz}}^{−2.6}$ which is more or less independent of direction. At high frequencies, the CMB dominates with TB ∼ 2.7 K in all directions
+
+A) What is the frequency of minimum background brightness temperature? Of minimum background
+flux density?
+
+B) What is the incident power on the earth from 10 MHz → 1 THz (107 − 1012 Hz)? If we intercept this
+power could we reduce our reliance on fossil fuels?
+\end{problem}
+
+
+
+\begin{answer}{3A}
+  T$_A$ approaches its min of 2.7 K as $\nu \rightarrow 0$ Hz
+
+  \bigskip
+
+  Finding the frequency of the minimum flux density is a little bit harder. In order to do so, we have to set $\frac{dS}{d\nu} = 0$ and solve for the resulting \nu.
+
+  \begin{align*}
+    0 &= \frac{dS}{d\nu} \\
+      &= \frac{d}{d\nu}( \frac{k \pi \theta^2}{2c^2} )(\nu^2) [(180 \text{ K}) (\frac{\nu}{180 \text{ MHz}})^{-2.6} + 2.7 \text{ K}] \\
+      &= \frac{d}{d\nu} ( \frac{180 \text{ K}}{180 \text{ MHz}^{-2.6}} \nu^{-0.6} + 2.7 \text{ K} \nu^2 ) \\
+      &= -0.6 \times \frac{180 \text{ K}}{180 \text{ MHz}^{-2.6}} \nu^{-1.6} + 5.4k \, \nu
+  \end{align}
+  Rearranging to solve for $\nu$, we find:
+  \begin{align*}
+    \frac{\nu}{\nu^{-1.6}} &= \frac{0.6 \times 180 \text{ K}}{180 \text{ MHz} ^{-2.6} \times 5.4 \text{ K}} \\
+    \nu &= (\frac{0.6 \times 180}{180^{-2.6} \times 5.4 \text{ K}})^{\frac{1}{2.6}} \\
+        &= 561.8 \text{ MHz}
+  \end{align}
+\end{answer}
+
+\begin{answer}{3B}
+  To integrate all the flux received in the given flux range, I wrote a little Python script to evaluate the Planck function using the given functional form for T$_B$ of T$_B = 180 \text{ K} \frac{\nu}{180 \text{ MHz}}^{−2.6} + 2.7 \text{ K}$. The script then integrated the Planck function over the given interval, multiplied that result both by the Earth's collecting area and an angular normalizing factor (combining to be $(4 \pi R_{\text{Sun}})^2$) to convert the specific intensity into a power, then multiplied it by a year's worth of hours to get a number in Wh, the unit normally used to quantify the Earth's energy consumption. The resulting number I got was about 53 TWh.
+
+
+  From Wikipedia, I found that the world's annual energy consumption is around 100,000 TWh. This is a bummer, since it means that even if managed to cover our entire planet in solar panels sensitive to energy in the 1MHz - 1THz range and convert the energy with full efficiency, we would only be able to get 1/2000 of the energy we need to power ourselves, which is tiny.
+
+  That being said, this is obviously really low-energy background radiation. Luckily, we've got a big star hanging out nearby with much more usable, higher-energy radiation that can do what we need it to do much more easily.
+
+\end{answer}
+
+
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import integrate
+from astropy.constants import h, c, k_B, R_earth
+h, c, k = h.value, c.value, k_B.value
+
+nu_min = 1e7
+nu_max = 1e12
+
+def Tb(nu):
+    # Get the brightness temperature.
+    T = 180 * (nu/(180e6))**(-2.6) + 2.7
+    return T
+
+def Planck(nu):
+  # Get the specific intensity.
+    I = (2 * h * nu**3 * c**-2) \
+        * 1/(np.exp((h * nu)/(k * Tb(nu))) - 1)
+    return I
+
+def Energy(n_years=1):
+    # Convert the integrated specific intensity to power and then to energy.
+    hours = 8760 * n_years
+    # Integrate returns the value and an uncertainty, so just grab the value.
+    I = integrate.quad(Planck, nu_min, nu_max)[0]
+    P = (4 * np.pi * R_earth.value)**2 * I
+    e = P * hours
+    # Make sure to return in TWh
+    return e * 1e-12
+
+\end{lstlisting}
+
+
+
+
+
+
+
+\end{document}
